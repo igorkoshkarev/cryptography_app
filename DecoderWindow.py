@@ -6,7 +6,8 @@ QVBoxLayout,
 QWidget,
 QPushButton,
 QLabel,
-QLineEdit)
+QLineEdit,
+QSpinBox)
 
 class DecoderWindow(QWidget):
 
@@ -33,11 +34,14 @@ class DecoderWindow(QWidget):
 
         self.button.clicked.connect(self.decrypt)
 
+        self.keyLabels = []
+
         for i in range(len(self.KEYS)):
             l = QLabel()
             l.setText(self.LABELS[i])
             layout.addWidget(l)
-            layout.addWidget(self.KEYS[i]())
+            self.keyLabels.append(self.KEYS[i]())
+            layout.addWidget(self.keyLabels[i])
 
         layout.addWidget(l1)
         layout.addWidget(self.message)
@@ -73,4 +77,34 @@ class AtbashDecoderWindow(DecoderWindow):
             else:
                 decrypt_text += i
             self.decoded.setText(decrypt_text)
+
+
+class CaesarDecoderWindow(DecoderWindow):
+
+    KEYS = [QSpinBox]
+    LABELS = ['Ключ: ']
+    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    N = 26
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 180)
+        self.keyLabels[0].setMaximum(self.N)
+
+
+    def decrypt(self):
+        text = self.message.text()
+        decrypt_text = ""
+        key = self.keyLabels[0].value()
+        for i in text:
+            if i in self.ALPHABET:
+                ind = self.ALPHABET.index(i)
+                decrypt_text += self.ALPHABET[(ind-key) % self.N]
+            elif i in self.ALPHABET_BIG:
+                ind = self.ALPHABET_BIG.index(i)
+                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N]
+            else:
+                decrypt_text += i
+        self.decoded.setText(decrypt_text)
 
