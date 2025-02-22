@@ -38,7 +38,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     m = MainWindow()
     e = EncoderWindow.RishelieEncoderWindow()
-    d = DecoderWindow.CaesarDecoderWindow()
+    d = DecoderWindow.RishelieDecoderWindow()
     e.show()
     m.show()
     d.show()
