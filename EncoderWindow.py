@@ -29,6 +29,8 @@ class EncoderWindow(QWidget):
         self.button = QPushButton()
         self.button.setText("Зашифровать")
 
+        self.button.clicked.connect(self.encrypt)
+
         layout.addWidget(l1)
         layout.addWidget(self.message)
         layout.addWidget(l2)
@@ -36,3 +38,29 @@ class EncoderWindow(QWidget):
         layout.addWidget(self.button)
 
         self.setLayout(layout)
+
+    def encrypt(self):
+        print('Encrypt')
+
+
+
+class AtbashEncoderWindow(EncoderWindow):
+
+    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    N = 26
+
+    def encrypt(self):
+        text = self.message.text()
+        encrypt_text = ""
+        for i in text:
+            if i in self.ALPHABET:
+                ind = self.ALPHABET.index(i)
+                encrypt_text += self.ALPHABET[self.N-(ind+1)]
+            elif i in self.ALPHABET_BIG:
+                ind = self.ALPHABET_BIG.index(i)
+                encrypt_text += self.ALPHABET_BIG[self.N-(ind+1)]
+            else:
+                encrypt_text += i
+        self.encoded.setText(encrypt_text)
+
