@@ -9,6 +9,10 @@ QLabel,
 QLineEdit)
 
 class DecoderWindow(QWidget):
+
+    LABELS = []
+    KEYS = []
+
     def __init__(self):
         super().__init__()
 
@@ -18,7 +22,6 @@ class DecoderWindow(QWidget):
         layout = QVBoxLayout()
         l1 = QLabel()
         l1.setText("Введите шифротекст: ")
-
         self.message = QLineEdit()
 
         l2 = QLabel()
@@ -30,8 +33,13 @@ class DecoderWindow(QWidget):
 
         self.button.clicked.connect(self.decrypt)
 
+        for i in range(len(self.KEYS)):
+            l = QLabel()
+            l.setText(self.LABELS[i])
+            layout.addWidget(l)
+            layout.addWidget(self.KEYS[i]())
+
         layout.addWidget(l1)
-        layout.
         layout.addWidget(self.message)
         layout.addWidget(l2)
         layout.addWidget(self.decoded)
@@ -40,11 +48,13 @@ class DecoderWindow(QWidget):
         self.setLayout(layout)
 
     def decrypt(self):
-        print("decrypt")
+        pass
 
 
 class AtbashDecoderWindow(DecoderWindow):
 
+    LABELS = []
+    KEYS = []
     ALPHABET = "abcdefghijklmnopqrstuvwxyz"
     ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     N = 26

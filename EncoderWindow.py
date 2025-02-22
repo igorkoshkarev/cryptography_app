@@ -31,6 +31,12 @@ class EncoderWindow(QWidget):
 
         self.button.clicked.connect(self.encrypt)
 
+        for i in range(len(self.KEYS)):
+            l = QLabel()
+            l.setText(self.LABELS[i])
+            layout.addWidget(l)
+            layout.addWidget(self.KEYS[i]())
+
         layout.addWidget(l1)
         layout.addWidget(self.message)
         layout.addWidget(l2)

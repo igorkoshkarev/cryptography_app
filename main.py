@@ -1,5 +1,8 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QComboBox, QVBoxLayout, QWidget, QPushButton, QSizePolicy
+import EncoderWindow
+import DecoderWindow
+
 
 class MainWindow(QMainWindow):
 
@@ -34,5 +37,9 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     m = MainWindow()
+    e = EncoderWindow.AtbashEncoderWindow()
+    d = DecoderWindow.AtbashDecoderWindow()
+    e.show()
     m.show()
+    d.show()
     sys.exit(app.exec())
