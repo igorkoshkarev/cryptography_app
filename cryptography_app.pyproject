@@ -1,5 +1,7 @@
 {
     "files": [
+        "DecoderWindow.py",
+        "EncoderWindow.py",
         "main.py"
     ]
 }
