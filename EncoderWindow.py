@@ -8,7 +8,9 @@ QWidget,
 QPushButton,
 QLabel,
 QLineEdit,
-QSpinBox)
+QSpinBox,
+QErrorMessage)
+import re
 
 
 class EncoderWindow(QWidget):
@@ -108,5 +110,48 @@ class CaesarEncoderWindow(EncoderWindow):
                 encrypt_text += self.ALPHABET_BIG[(ind+key) % self.N]
             else:
                 encrypt_text += i
+        self.encoded.setText(encrypt_text)
+
+
+class RishelieEncoderWindow(EncoderWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    N = 26
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 180)
+
+
+    def encrypt(self):
+        text = self.message.text()
+        encrypt_text = ""
+        key = self.keyLabels[0].text()
+        base_index = 0
+        if re.fullmatch(r'(\((\d,?)+\))*', key):
+            l = re.split(r'\)\(|\(|\)', key)
+            for i in l:
+                nums = i.split(',')
+                len_nums = len(nums) if nums[-1] != '' else len(nums)-1
+                used_nums = set()
+                for i in range(len_nums):
+                    number = int(nums[i])-1
+                    if 0 <= number < len_nums and base_index+number < len(text) and number not in used_nums:
+                        encrypt_text += text[base_index+number]
+                        used_nums.add(number)
+                    else:
+                        self.error = QErrorMessage()
+                        self.error.showMessage('Ваш ключ неверный')
+                        return
+                base_index += len_nums
+            for i in range(base_index, len(text)):
+                encrypt_text += text[i]
+        else:
+            self.error = QErrorMessage()
+            self.error.showMessage('Ваш ключ неверный')
+            return
         self.encoded.setText(encrypt_text)
 
