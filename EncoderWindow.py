@@ -91,20 +91,22 @@ class CaesarEncoderWindow(EncoderWindow):
 
     def __init__(self):
         super().__init__()
+        self.setFixedSize(300, 180)
         self.keyLabels[0].setMaximum(self.N)
 
 
-    # def encrypt(self):
-    #     text = self.message.text()
-    #     encrypt_text = ""
-    #     for i in text:
-    #         if i in self.ALPHABET:
-    #             ind = self.ALPHABET.index(i)
-    #             encrypt_text += self.ALPHABET[self.N-(ind+1)]
-    #         elif i in self.ALPHABET_BIG:
-    #             ind = self.ALPHABET_BIG.index(i)
-    #             encrypt_text += self.ALPHABET_BIG[self.N-(ind+1)]
-    #         else:
-    #             encrypt_text += i
-    #     self.encoded.setText(encrypt_text)
+    def encrypt(self):
+        text = self.message.text()
+        encrypt_text = ""
+        key = self.keyLabels[0].value()
+        for i in text:
+            if i in self.ALPHABET:
+                ind = self.ALPHABET.index(i)
+                encrypt_text += self.ALPHABET[(ind+key) % self.N]
+            elif i in self.ALPHABET_BIG:
+                ind = self.ALPHABET_BIG.index(i)
+                encrypt_text += self.ALPHABET_BIG[(ind+key) % self.N]
+            else:
+                encrypt_text += i
+        self.encoded.setText(encrypt_text)
 
