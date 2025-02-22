@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     m = MainWindow()
-    e = EncoderWindow.AtbashEncoderWindow()
+    e = EncoderWindow.CaesarEncoderWindow()
     d = DecoderWindow.AtbashDecoderWindow()
     e.show()
     m.show()

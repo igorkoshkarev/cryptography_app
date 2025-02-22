@@ -7,10 +7,15 @@ QVBoxLayout,
 QWidget,
 QPushButton,
 QLabel,
-QLineEdit)
+QLineEdit,
+QSpinBox)
 
 
 class EncoderWindow(QWidget):
+
+    KEYS = []
+    LABELS = []
+
     def __init__(self):
         super().__init__()
 
@@ -31,11 +36,14 @@ class EncoderWindow(QWidget):
 
         self.button.clicked.connect(self.encrypt)
 
+        self.keyLabels = []
         for i in range(len(self.KEYS)):
             l = QLabel()
             l.setText(self.LABELS[i])
             layout.addWidget(l)
-            layout.addWidget(self.KEYS[i]())
+            self.keyLabels.append(self.KEYS[i]())
+            layout.addWidget(self.keyLabels[i])
+
 
         layout.addWidget(l1)
         layout.addWidget(self.message)
@@ -52,6 +60,8 @@ class EncoderWindow(QWidget):
 
 class AtbashEncoderWindow(EncoderWindow):
 
+    KEYS = []
+    LABELS = []
     ALPHABET = "abcdefghijklmnopqrstuvwxyz"
     ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     N = 26
@@ -69,4 +79,32 @@ class AtbashEncoderWindow(EncoderWindow):
             else:
                 encrypt_text += i
         self.encoded.setText(encrypt_text)
+
+
+class CaesarEncoderWindow(EncoderWindow):
+
+    KEYS = [QSpinBox]
+    LABELS = ['Ключ: ']
+    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    N = 26
+
+    def __init__(self):
+        super().__init__()
+        self.keyLabels[0].setMaximum(self.N)
+
+
+    # def encrypt(self):
+    #     text = self.message.text()
+    #     encrypt_text = ""
+    #     for i in text:
+    #         if i in self.ALPHABET:
+    #             ind = self.ALPHABET.index(i)
+    #             encrypt_text += self.ALPHABET[self.N-(ind+1)]
+    #         elif i in self.ALPHABET_BIG:
+    #             ind = self.ALPHABET_BIG.index(i)
+    #             encrypt_text += self.ALPHABET_BIG[self.N-(ind+1)]
+    #         else:
+    #             encrypt_text += i
+    #     self.encoded.setText(encrypt_text)
 
