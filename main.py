@@ -6,6 +6,9 @@ import DecoderWindow
 
 class MainWindow(QMainWindow):
 
+    ENCODER_WINDOWS = [EncoderWindow.AtbashEncoderWindow, EncoderWindow.CaesarEncoderWindow, EncoderWindow.RishelieEncoderWindow]
+    DECODER_WINDOWS = [DecoderWindow.AtbashDecoderWindow, DecoderWindow.CaesarDecoderWindow, DecoderWindow.RishelieDecoderWindow]
+
     def __init__(self):
         super().__init__()
 
@@ -14,15 +17,17 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout()
 
-        ciphers = QComboBox()
-        ciphers.addItems(['Шифр Адбаша', 'Шифр Цезаря', 'Шифр Решилье'])
+        self.ciphers = QComboBox()
+        self.ciphers.addItems(['Шифр Адбаша', 'Шифр Цезаря', 'Шифр Решилье'])
 
         encode_button = QPushButton()
         decode_button = QPushButton()
         encode_button.setText("Зашифровать")
-        decode_button.setText('Расшифровать')
+        decode_button.setText("Расшифровать")
+        encode_button.clicked.connect(self.encrypt)
+        decode_button.clicked.connect(self.decrypt)
 
-        layout.addWidget(ciphers)
+        layout.addWidget(self.ciphers)
         layout.addWidget(encode_button)
         layout.addWidget(decode_button)
 
@@ -31,15 +36,20 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
+    def encrypt(self):
+        ind = self.ciphers.currentIndex()
+        self.w = self.ENCODER_WINDOWS[ind]()
+        self.w.show()
+
+    def decrypt(self):
+        ind = self.ciphers.currentIndex()
+        self.w = self.DECODER_WINDOWS[ind]()
+        self.w.show()
 
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     m = MainWindow()
-    e = EncoderWindow.RishelieEncoderWindow()
-    d = DecoderWindow.RishelieDecoderWindow()
-    e.show()
     m.show()
-    d.show()
     sys.exit(app.exec())
