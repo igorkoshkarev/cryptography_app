@@ -35,7 +35,8 @@ class DecoderWindow(QWidget):
 
         l2 = QLabel()
         l2.setText("Расшифрованное сообщение: ")
-        self.decoded = QLabel()
+        self.decoded = QLineEdit()
+        self.decoded.setReadOnly(True)
 
         self.button = QPushButton()
         self.button.setText("Расшифровать")
@@ -77,10 +78,10 @@ class AtbashDecoderWindow(DecoderWindow):
                 decrypt_text += self.ALPHABET_BIG[self.N-(ind+1)]
             elif i in self.RUSS_ALPHABET:
                 ind = self.RUSS_ALPHABET.index(i)
-                decrypt_text += self.RUSS_ALPHABET[self.RUSS_N-(ind+1)]
+                decrypt_text += self.RUSS_ALPHABET[self.N_RUSS-(ind+1)]
             elif i in self.RUSS_ALPHABET_BIG:
                 ind = self.RUSS_ALPHABET_BIG.index(i)
-                decrypt_text += self.ALPHABET_BIG[self.RUSS_N-(ind+1)]
+                decrypt_text += self.ALPHABET_BIG[self.N_RUSS-(ind+1)]
             else:
                 decrypt_text += i
             self.decoded.setText(decrypt_text)
@@ -93,7 +94,7 @@ class CaesarDecoderWindow(DecoderWindow):
 
     def __init__(self):
         super().__init__()
-        self.setFixedSize(300, 180)
+        self.setFixedSize(300, 200)
         self.keyLabels[0].setMaximum(self.N)
 
 
@@ -110,10 +111,10 @@ class CaesarDecoderWindow(DecoderWindow):
                 decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N]
             elif i in self.RUSS_ALPHABET:
                 ind = self.RUSS_ALPHABET.index(i)
-                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.RUSS_N]
+                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N_RUSS]
             elif i in self.RUSS_ALPHABET_BIG:
                 ind = self.RUSS_ALPHABET_BIG.index(i)
-                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.RUSS_N]
+                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N_RUSS]
             else:
                 decrypt_text += i
         self.decoded.setText(decrypt_text)

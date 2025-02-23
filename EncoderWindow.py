@@ -37,7 +37,8 @@ class EncoderWindow(QWidget):
         self.message = QLineEdit()
         l2 = QLabel()
         l2.setText("Зашифрованное сообщение: ")
-        self.encoded = QLabel()
+        self.encoded = QLineEdit()
+        self.encoded.setReadOnly(True)
 
         self.button = QPushButton()
         self.button.setText("Зашифровать")
@@ -80,10 +81,10 @@ class AtbashEncoderWindow(EncoderWindow):
                 encrypt_text += self.ALPHABET_BIG[self.N-(ind+1)]
             elif i in self.RUSS_ALPHABET:
                 ind = self.RUSS_ALPHABET.index(i)
-                encrypt_text += self.RUSS_ALPHABET[self.RUSS_N-(ind+1)]
+                encrypt_text += self.RUSS_ALPHABET[self.N_RUSS-(ind+1)]
             elif i in self.RUSS_ALPHABET_BIG:
                 ind = self.RUSS_ALPHABET_BIG.index(i)
-                encrypt_text += self.RUSS_ALPHABET_BIG[self.RUSS_N-(ind+1)]
+                encrypt_text += self.RUSS_ALPHABET_BIG[self.N_RUSS-(ind+1)]
             else:
                 encrypt_text += i
         self.encoded.setText(encrypt_text)
@@ -96,8 +97,8 @@ class CaesarEncoderWindow(EncoderWindow):
 
     def __init__(self):
         super().__init__()
-        self.setFixedSize(300, 180)
-        self.keyLabels[0].setMaximum(self.RUSS_N)
+        self.setFixedSize(300, 200)
+        self.keyLabels[0].setMaximum(self.N_RUSS)
 
 
     def encrypt(self):
@@ -113,10 +114,10 @@ class CaesarEncoderWindow(EncoderWindow):
                 encrypt_text += self.ALPHABET_BIG[(ind+key) % self.N]
             elif i in self.RUSS_ALPHABET:
                 ind = self.RUSS_ALPHABET.index(i)
-                encrypt_text += self.RUSS_ALPHABET[(ind+key) % self.RUSS_N]
+                encrypt_text += self.RUSS_ALPHABET[(ind+key) % self.N_RUSS]
             elif i in self.RUSS_ALPHABET_BIG:
                 ind = self.RUSS_ALPHABET_BIG.index(i)
-                encrypt_text += self.RUSS_ALPHABET_BIG[(ind+key) % self.RUSS_N]
+                encrypt_text += self.RUSS_ALPHABET_BIG[(ind+key) % self.N_RUSS]
             else:
                 encrypt_text += i
         self.encoded.setText(encrypt_text)
