@@ -15,6 +15,12 @@ class DecoderWindow(QWidget):
 
     LABELS = []
     KEYS = []
+    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    RUSS_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+    RUSS_ALPHABET_BIG = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+    N = 26
+    N_RUSS = 33
 
     def __init__(self):
         super().__init__()
@@ -59,23 +65,22 @@ class DecoderWindow(QWidget):
 
 class AtbashDecoderWindow(DecoderWindow):
 
-    LABELS = []
-    KEYS = []
-    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    N = 26
-
     def decrypt(self):
         text = self.message.text()
         decrypt_text = ""
         for i in text:
             if i in self.ALPHABET:
                 ind = self.ALPHABET.index(i)
-
                 decrypt_text += self.ALPHABET[self.N-(ind+1)]
             elif i in self.ALPHABET_BIG:
                 ind = self.ALPHABET_BIG.index(i)
                 decrypt_text += self.ALPHABET_BIG[self.N-(ind+1)]
+            elif i in self.RUSS_ALPHABET:
+                ind = self.RUSS_ALPHABET.index(i)
+                decrypt_text += self.RUSS_ALPHABET[self.RUSS_N-(ind+1)]
+            elif i in self.RUSS_ALPHABET_BIG:
+                ind = self.RUSS_ALPHABET_BIG.index(i)
+                decrypt_text += self.ALPHABET_BIG[self.RUSS_N-(ind+1)]
             else:
                 decrypt_text += i
             self.decoded.setText(decrypt_text)
@@ -85,9 +90,6 @@ class CaesarDecoderWindow(DecoderWindow):
 
     KEYS = [QSpinBox]
     LABELS = ['Ключ: ']
-    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    N = 26
 
     def __init__(self):
         super().__init__()
@@ -106,6 +108,12 @@ class CaesarDecoderWindow(DecoderWindow):
             elif i in self.ALPHABET_BIG:
                 ind = self.ALPHABET_BIG.index(i)
                 decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N]
+            elif i in self.RUSS_ALPHABET:
+                ind = self.RUSS_ALPHABET.index(i)
+                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.RUSS_N]
+            elif i in self.RUSS_ALPHABET_BIG:
+                ind = self.RUSS_ALPHABET_BIG.index(i)
+                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.RUSS_N]
             else:
                 decrypt_text += i
         self.decoded.setText(decrypt_text)
@@ -115,9 +123,6 @@ class RishelieDecoderWindow(DecoderWindow):
 
     KEYS = [QLineEdit]
     LABELS = ['Ключ: ']
-    ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-    ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    N = 26
 
     def __init__(self):
         super().__init__()
