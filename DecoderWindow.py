@@ -95,7 +95,7 @@ class CaesarDecoderWindow(DecoderWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(300, 200)
-        self.keyLabels[0].setMaximum(self.N)
+        self.keyLabels[0].setMaximum(self.N_RUSS)
 
 
     def decrypt(self):
@@ -111,10 +111,10 @@ class CaesarDecoderWindow(DecoderWindow):
                 decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N]
             elif i in self.RUSS_ALPHABET:
                 ind = self.RUSS_ALPHABET.index(i)
-                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N_RUSS]
+                decrypt_text += self.RUSS_ALPHABET[(ind-key) % self.N_RUSS]
             elif i in self.RUSS_ALPHABET_BIG:
                 ind = self.RUSS_ALPHABET_BIG.index(i)
-                decrypt_text += self.ALPHABET_BIG[(ind-key) % self.N_RUSS]
+                decrypt_text += self.RUSS_ALPHABET_BIG[(ind-key) % self.N_RUSS]
             else:
                 decrypt_text += i
         self.decoded.setText(decrypt_text)
