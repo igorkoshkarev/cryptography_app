@@ -6,8 +6,8 @@ import DecoderWindow
 
 class MainWindow(QMainWindow):
 
-    ENCODER_WINDOWS = [EncoderWindow.AtbashEncoderWindow, EncoderWindow.CaesarEncoderWindow, EncoderWindow.RishelieEncoderWindow, EncoderWindow.GronsfeldEncoderWindow]
-    DECODER_WINDOWS = [DecoderWindow.AtbashDecoderWindow, DecoderWindow.CaesarDecoderWindow, DecoderWindow.RishelieDecoderWindow, DecoderWindow.GronsfeldDecoderWindow]
+    ENCODER_WINDOWS = [EncoderWindow.AtbashEncoderWindow, EncoderWindow.CaesarEncoderWindow, EncoderWindow.RishelieEncoderWindow, EncoderWindow.GronsfeldEncoderWindow, EncoderWindow.VigenereEncoderWindow]
+    DECODER_WINDOWS = [DecoderWindow.AtbashDecoderWindow, DecoderWindow.CaesarDecoderWindow, DecoderWindow.RishelieDecoderWindow, DecoderWindow.GronsfeldDecoderWindow, DecoderWindow.VigenereDecoderWindow]
 
     def __init__(self):
         super().__init__()
@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
 
         self.ciphers = QComboBox()
-        self.ciphers.addItems(['Шифр Адбаша', 'Шифр Цезаря', 'Шифр Решилье', 'Шифр Гросфельда'])
+        self.ciphers.addItems(['Шифр Адбаша', 'Шифр Цезаря', 'Шифр Решилье', 'Шифр Гросфельда', 'Шифр Виженера'])
 
         encode_button = QPushButton()
         decode_button = QPushButton()
