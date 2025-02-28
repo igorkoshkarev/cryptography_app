@@ -209,3 +209,41 @@ class GronsfeldDecoderWindow(DecoderWindow):
             return
         self.decoded.setText(decrypt_text)
 
+
+class VigenereDecoderWindow(DecoderWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
+    
+    def key_is_valid(self, key):
+        try:
+            assert key.isalpha(), "Ваш ключ неверный"
+        except AssertionError:
+            return False
+        else:
+            return True
+        
+    def decrypt(self):
+        text = self.message.text()
+        decrypt_text = ""
+        key = self.keyLabels[0].text()
+        
+        if self.key_is_valid(key):
+            ind = 0
+            for i in text:
+                ind_k = self.ALL_LETTERS.index(key[ind % len(key)])
+                if i in self.ALL_LETTERS:
+                    ind_i = self.ALL_LETTERS.index(i)
+                    decrypt_text += self.ALL_LETTERS[(ind_i - ind_k) % self.N_ALL]
+                else:
+                    decrypt_text += i
+                ind += 1   
+        else:
+            self.error = QErrorMessage()
+            self.error.showMessage('Ваш ключ неверный')
+            return
+        self.decoded.setText(decrypt_text)
