@@ -185,7 +185,7 @@ class GronsfeldEncoderWindow(EncoderWindow):
         encrypt_text = ""
         key = self.keyLabels[0].text()
         
-        if key_is_valid(key):
+        if self.key_is_valid(key):
             ind = 0
             for i in text:
                 ind_k = int(key[ind % len(key)])
