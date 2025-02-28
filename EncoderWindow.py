@@ -170,12 +170,12 @@ class GronsfeldEncoderWindow(EncoderWindow):
 
     def __init__(self):
         super().__init__()
-        self.setFixedSize(300, 180)
+        self.setFixedSize(300, 200)
     
     def key_is_valid(self, key):
         try:
             assert key.isnumeric(), "Ваш ключ неверный"
-        except AssertionException:
+        except AssertionError:
             return False
         else:
             return True
@@ -197,10 +197,10 @@ class GronsfeldEncoderWindow(EncoderWindow):
                     encrypt_text += self.ALPHABET_BIG[(ind_i + ind_k) % self.N]
                 elif i in self.RUSS_ALPHABET:
                     ind_i = self.RUSS_ALPHABET.index(i)
-                    encrypt_text += self.RUSS_ALPHABET[(ind_i + ind_k) % self.N]
+                    encrypt_text += self.RUSS_ALPHABET[(ind_i + ind_k) % self.N_RUSS]
                 elif i in self.RUSS_ALPHABET_BIG:
                     ind_i = self.RUSS_ALPHABET_BIG.index(i)
-                    encrypt_text += self.RUSS_ALPHABET_BIG[(ind_i + ind_k) % self.N]
+                    encrypt_text += self.RUSS_ALPHABET_BIG[(ind_i + ind_k) % self.N_RUSS]
                 else:
                     encrypt_text += i
                 ind += 1   

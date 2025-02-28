@@ -174,7 +174,7 @@ class GronsfeldDecoderWindow(DecoderWindow):
     def key_is_valid(self, key):
         try:
             assert key.isnumeric(), "Ваш ключ неверный"
-        except AssertionException:
+        except AssertionError:
             return False
         else:
             return True
