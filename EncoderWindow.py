@@ -19,8 +19,10 @@ class EncoderWindow(QWidget):
     ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     RUSS_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
     RUSS_ALPHABET_BIG = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+    ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     N = 26
     N_RUSS = 33
+    N_ALL = 118
     KEYS = []
     LABELS = []
 
@@ -180,4 +182,23 @@ class VigenereEncoderWindow(EncoderWindow):
         else:
             return True
         
-
+    def encrypt(self):
+        text = self.message.text()
+        encrypt_text = ""
+        key = self.keyLabels[0].text()
+        
+        if self.key_is_valid(key):
+            ind = 0
+            for i in text:
+                ind_k = self.ALL_LETTERS.index(key[ind % len(key)])
+                if i in self.ALL_LETTERS:
+                    ind_i = self.ALL_LETTERS.index(i)
+                    encrypt_text += self.ALL_LETTERS[(ind_i + ind_k) % self.N_ALL]
+                else:
+                    encrypt_text += i
+                ind += 1   
+        else:
+            self.error = QErrorMessage()
+            self.error.showMessage('Ваш ключ неверный')
+            return
+        self.encoded.setText(encrypt_text)
