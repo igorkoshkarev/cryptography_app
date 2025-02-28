@@ -162,3 +162,50 @@ class RishelieDecoderWindow(DecoderWindow):
         self.decoded.setText(decrypt_text)
 
 
+class GronsfeldDecoderWindow(DecoderWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
+    
+    def key_is_valid(self, key):
+        try:
+            assert key.isnumeric(), "Ваш ключ неверный"
+        except AssertionException:
+            return False
+        else:
+            return True
+        
+    def decrypt(self):
+        text = self.message.text()
+        decrypt_text = ""
+        key = self.keyLabels[0].text()
+        
+        if self.key_is_valid(key):
+            ind = 0
+            for i in text:
+                ind_k = int(key[ind % len(key)])
+                if i in self.ALPHABET:
+                    ind_i = self.ALPHABET.index(i)
+                    decrypt_text += self.ALPHABET[(ind_i - ind_k) % self.N]
+                elif i in self.ALPHABET_BIG:
+                    ind_i = self.ALPHABET_BIG.index(i)
+                    decrypt_text += self.ALPHABET_BIG[(ind_i - ind_k) % self.N]
+                elif i in self.RUSS_ALPHABET:
+                    ind_i = self.RUSS_ALPHABET.index(i)
+                    decrypt_text += self.RUSS_ALPHABET[(ind_i - ind_k) % self.N_RUSS]
+                elif i in self.RUSS_ALPHABET_BIG:
+                    ind_i = self.RUSS_ALPHABET_BIG.index(i)
+                    decrypt_text += self.RUSS_ALPHABET_BIG[(ind_i - ind_k) % self.N_RUSS]
+                else:
+                    decrypt_text += i
+                ind += 1   
+        else:
+            self.error = QErrorMessage()
+            self.error.showMessage('Ваш ключ неверный')
+            return
+        self.decoded.setText(decrypt_text)
+
