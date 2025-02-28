@@ -172,7 +172,7 @@ class GronsfeldEncoderWindow(EncoderWindow):
 
     def __init__(self):
         super().__init__()
-        self.setFixedSize(300, 180)
+        self.setFixedSize(300, 200)
     
     def key_is_valid(self, key):
         try:
