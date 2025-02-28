@@ -19,8 +19,10 @@ class DecoderWindow(QWidget):
     ALPHABET_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     RUSS_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
     RUSS_ALPHABET_BIG = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+    ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     N = 26
     N_RUSS = 33
+    N_ALL = 118
 
     def __init__(self):
         super().__init__()
