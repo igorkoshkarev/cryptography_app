@@ -162,3 +162,21 @@ class RishelieEncoderWindow(EncoderWindow):
             return
         self.encoded.setText(encrypt_text)
 
+
+class GronsfeldEncoderWindow(EncoderWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 180)
+    
+    def key_is_valid(self, key):
+        try:
+            assert key.isnumeric(), "Ваш ключ неверный"
+        except AssertionException:
+            return False
+        else:
+            return True
+
