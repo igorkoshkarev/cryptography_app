@@ -163,7 +163,7 @@ class RishelieEncoderWindow(EncoderWindow):
         self.encoded.setText(encrypt_text)
 
 
-class GronsfeldEncoderWindow(EncoderWindow):
+class VigenereEncoderWindow(EncoderWindow):
 
     KEYS = [QLineEdit]
     LABELS = ['Ключ: ']
@@ -174,38 +174,10 @@ class GronsfeldEncoderWindow(EncoderWindow):
     
     def key_is_valid(self, key):
         try:
-            assert key.isnumeric(), "Ваш ключ неверный"
-        except AssertionError:
+            assert key.isalpha(), "Ваш ключ неверный"
+        except Exception:
             return False
         else:
             return True
         
-    def encrypt(self):
-        text = self.message.text()
-        encrypt_text = ""
-        key = self.keyLabels[0].text()
-        
-        if self.key_is_valid(key):
-            ind = 0
-            for i in text:
-                ind_k = int(key[ind % len(key)])
-                if i in self.ALPHABET:
-                    ind_i = self.ALPHABET.index(i)
-                    encrypt_text += self.ALPHABET[(ind_i + ind_k) % self.N]
-                elif i in self.ALPHABET_BIG:
-                    ind_i = self.ALPHABET_BIG.index(i)
-                    encrypt_text += self.ALPHABET_BIG[(ind_i + ind_k) % self.N]
-                elif i in self.RUSS_ALPHABET:
-                    ind_i = self.RUSS_ALPHABET.index(i)
-                    encrypt_text += self.RUSS_ALPHABET[(ind_i + ind_k) % self.N_RUSS]
-                elif i in self.RUSS_ALPHABET_BIG:
-                    ind_i = self.RUSS_ALPHABET_BIG.index(i)
-                    encrypt_text += self.RUSS_ALPHABET_BIG[(ind_i + ind_k) % self.N_RUSS]
-                else:
-                    encrypt_text += i
-                ind += 1   
-        else:
-            self.error = QErrorMessage()
-            self.error.showMessage('Ваш ключ неверный')
-            return
-        self.encoded.setText(encrypt_text)
+
