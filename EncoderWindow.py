@@ -177,7 +177,7 @@ class GronsfeldEncoderWindow(EncoderWindow):
     def key_is_valid(self, key):
         try:
             assert key.isnumeric(), "Ваш ключ неверный"
-        except AssertionException:
+        except AssertionError:
             return False
         else:
             return True
@@ -225,7 +225,7 @@ class VigenereEncoderWindow(EncoderWindow):
     def key_is_valid(self, key):
         try:
             assert key.isalpha(), "Ваш ключ неверный"
-        except Exception:
+        except AssertionError:
             return False
         else:
             return True
@@ -250,3 +250,34 @@ class VigenereEncoderWindow(EncoderWindow):
             self.error.showMessage('Ваш ключ неверный')
             return
         self.encoded.setText(encrypt_text)
+
+
+class PlayfairEncoderWindow(EncoderWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
+    
+    def key_is_valid(self, key):
+        try:
+            assert key.isalpha(), "Ваш ключ неверный"
+            assert len(key) == len(set(key)), "Ваш ключ имеет повторяющиеся символы"
+            key = key.lower()
+            is_english = False
+            is_russian = False
+            for i in key:
+                if i in self.ALPHABET:
+                    is_english = True
+                else:
+                    is_russian = True
+                if is_russian and is_english:
+                    raise AssertionError
+        except AssertionError:
+            return False
+        else:
+            return True
+    
+    
