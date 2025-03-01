@@ -11,6 +11,7 @@ QLineEdit,
 QSpinBox,
 QErrorMessage)
 import re
+import numpy as np
 
 
 class EncoderWindow(QWidget):
@@ -279,5 +280,17 @@ class PlayfairEncoderWindow(EncoderWindow):
             return False
         else:
             return True
+    
+    def create_playfair_matrix(self, key):
+        if key[0] in self.ALPHABET:
+            alphabet = self.ALPHABET
+            shape = (5,5)
+        else:
+            alphabet = self.RUSS_ALPHABET
+            shape = (4,8)
+        key_s = set(key)
+        chiper_array = np.array(list(key) + sorted(set(alphabet) - set(key)))
+        chiper_array.reshape(shape)
+        return chiper_array
     
     
