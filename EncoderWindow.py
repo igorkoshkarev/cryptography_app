@@ -317,6 +317,12 @@ class PlayfairEncoderWindow(EncoderWindow):
         text = text.replace(' ', '')
         text = text.replace('j', 'i')
         text = text.replace('ё', 'е')
+        if self.get_string_lang(text) == 'engilsh':
+            spacer = 'x'
+            another_spacer = 'q'
+        else:
+            spacer = 'ъ'
+            another_spacer = 'ь'
         error = True
         bigram = []
         base_index = 0
@@ -324,17 +330,17 @@ class PlayfairEncoderWindow(EncoderWindow):
             error = False
             for i in range(base_index, len(text), 2):
                 if i == len(text)-1:
-                    if text[i] != 'x':
-                        b = text[i] + 'x'
+                    if text[i] != spacer:
+                        b = text[i] + spacer
                     else:
-                        b = text[i] + 'q'
+                        b = text[i] + another_spacer
                 elif text[i] == text[i+1]:
-                    if text[i] != 'x':
-                        b = text[i] + 'x'
-                        text = text[:i+1] + 'x' + text[i+1:]
+                    if text[i] != spacer:
+                        b = text[i] + spacer
+                        text = text[:i+1] + spacer + text[i+1:]
                     else:
-                        b = text[i] + 'q'
-                        text = text[:i+1] + 'q' + text[i+1:]
+                        b = text[i] + another_spacer
+                        text = text[:i+1] + another_spacer + text[i+1:]
                     error = True
                 else:
                     b = text[i] + text[i+1]
