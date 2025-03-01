@@ -261,7 +261,21 @@ class PlayfairEncoderWindow(EncoderWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(300, 200)
-    
+
+    def get_string_lang(self, string):
+        if not string:
+            return "both"
+        is_english = False
+        is_russian = False
+        for i in string:
+            if i in self.ALPHABET:
+                is_english = True
+            else:
+                is_russian = True
+            if is_english and is_russian:
+                return "both"
+        return "english" if is_english else "russian"
+
     def key_is_valid(self, key):
         try:
             assert key.isalpha(), "Ваш ключ неверный"
@@ -293,4 +307,11 @@ class PlayfairEncoderWindow(EncoderWindow):
         chiper_array.reshape(shape)
         return chiper_array
     
-    
+    def encode(self):
+        text = self.message.text()
+        encrypt_text = ""
+        key = self.keyLabels[0].text()
+        
+        if self.key_is_valid(key):
+            matrix = self.create_playfair_matrix(key)
+        
