@@ -10,6 +10,7 @@ QLineEdit,
 QSpinBox,
 QErrorMessage)
 import re
+import numpy as np
 
 class DecoderWindow(QWidget):
 
@@ -249,3 +250,137 @@ class VigenereDecoderWindow(DecoderWindow):
             self.error.showMessage('Ваш ключ неверный')
             return
         self.decoded.setText(decrypt_text)
+
+
+class PlayfairDecoderWindow(DecoderWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+    ALPHABET = "abcdefghiklmnopqrstuvwxyz"
+    RUSS_ALPHABET = "абвгдежзийклмнопрстуфхцчшщъыьэюя"
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
+
+    def get_string_lang(self, string):
+        if not string:
+            return "both"
+        is_english = False
+        is_russian = False
+        for i in string:
+            if i in self.ALPHABET:
+                is_english = True
+            elif i in self.RUSS_ALPHABET:
+                is_russian = True
+            if is_english and is_russian:
+                return "both"
+        return "english" if is_english else "russian"
+
+    def key_is_valid(self, key):
+        try:
+            key = key.lower()
+            assert key.isalpha(), "Ваш ключ неверный"
+            assert len(key) == len(set(key)), "Ваш ключ имеет повторяющиеся символы"
+            assert self.get_string_lang(key) != 'both', "Ваш ключ должен содержать символы одного языка"
+        except AssertionError:
+            return False
+        else:
+            return True
+    
+    def create_playfair_matrix(self, key):
+        lang = self.get_string_lang(key)
+        if lang == 'english':
+            alphabet = self.ALPHABET
+            shape = (5,5)
+        elif lang == 'russian':
+            alphabet = self.RUSS_ALPHABET
+            shape = (4,8)
+        key_s = set(key)
+        chiper_matrix = np.array(list(key) + sorted(set(alphabet) - set(key)))
+        chiper_matrix = chiper_matrix.reshape(shape)
+        return chiper_matrix
+
+    def text_is_valid(self, text):
+        try:
+            text = text.replace(' ', '')
+            assert text.isalpha(), "Ваш ключ неверный"
+        except AssertionError:
+            return False
+        else:
+            return True
+    
+
+    def get_bigram(self, text):
+        text = text.lower()
+        text = text.replace(' ', '')
+        text = text.replace('j', 'i')
+        text = text.replace('ё', 'е')
+        if self.get_string_lang(text) == 'engilsh':
+            spacer = 'x'
+            another_spacer = 'q'
+        else:
+            spacer = 'ъ'
+            another_spacer = 'ь'
+        error = True
+        bigram = []
+        base_index = 0
+        while error:
+            error = False
+            for i in range(base_index, len(text), 2):
+                if i == len(text)-1:
+                    if text[i] != spacer:
+                        b = text[i] + spacer
+                    else:
+                        b = text[i] + another_spacer
+                elif text[i] == text[i+1]:
+                    if text[i] != spacer:
+                        b = text[i] + spacer
+                        text = text[:i+1] + spacer + text[i+1:]
+                    else:
+                        b = text[i] + another_spacer
+                        text = text[:i+1] + another_spacer + text[i+1:]
+                    error = True
+                else:
+                    b = text[i] + text[i+1]
+                
+                base_index += 2
+                bigram.append(b)
+                if error:
+                    break
+        return bigram
+
+
+    def decrypt(self):
+        text = self.message.text()
+        decrypt_text = ""
+        key = self.keyLabels[0].text()
+        
+        if self.key_is_valid(key) and self.text_is_valid(text) and self.get_string_lang(key) == self.get_string_lang(text):
+            matrix = self.create_playfair_matrix(key)
+            print(matrix)
+            bigram = self.get_bigram(text)
+            print(bigram)
+            for i in bigram:
+                s = matrix.shape
+                first = i[0]
+                second = i[1]
+                pos_first = np.where(matrix == first)
+                pos_first = (pos_first[0], pos_first[1])
+                pos_second = np.where(matrix == second)
+                pos_second = (pos_second[0], pos_second[1])
+                if pos_first[0] == pos_second[0]:
+                    pos_first, pos_second = (pos_first[0], (pos_first[1]-1) % s[1]), (pos_second[0], (pos_second[1]-1) % s[1])
+                elif pos_first[1] == pos_second[1]:
+                    pos_first, pos_second = ((pos_first[0]-1) % s[0], pos_first[1]), ((pos_second[0]-1) % s[0], pos_second[1])
+                else:
+                    pos_first, pos_second = (pos_first[0], pos_second[1]), (pos_second[0], pos_first[1])
+                print(pos_first, pos_second)
+                decrypt_text += matrix[int(pos_first[0])][int(pos_first[1])]
+                decrypt_text += matrix[int(pos_second[0])][int(pos_second[1])]
+        else:
+            self.error = QErrorMessage()
+            self.error.showMessage('Ваш ключ неверный')
+            return
+        self.decoded.setText(decrypt_text)
+            
