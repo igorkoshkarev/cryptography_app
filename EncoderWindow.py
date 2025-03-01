@@ -270,7 +270,7 @@ class PlayfairEncoderWindow(EncoderWindow):
         for i in string:
             if i in self.ALPHABET:
                 is_english = True
-            else:
+            elif i in self.RUSS_ALPHABET:
                 is_russian = True
             if is_english and is_russian:
                 return "both"
@@ -278,40 +278,43 @@ class PlayfairEncoderWindow(EncoderWindow):
 
     def key_is_valid(self, key):
         try:
+            key = key.lower()
             assert key.isalpha(), "Ваш ключ неверный"
             assert len(key) == len(set(key)), "Ваш ключ имеет повторяющиеся символы"
-            key = key.lower()
-            is_english = False
-            is_russian = False
-            for i in key:
-                if i in self.ALPHABET:
-                    is_english = True
-                else:
-                    is_russian = True
-                if is_russian and is_english:
-                    raise AssertionError
+            assert self.get_string_lang(key) != 'both', "Ваш ключ должен содержать символы одного языка"
         except AssertionError:
             return False
         else:
             return True
     
     def create_playfair_matrix(self, key):
-        if key[0] in self.ALPHABET:
+        lang = self.get_string_lang(key)
+        if lang == 'english':
             alphabet = self.ALPHABET
             shape = (5,5)
-        else:
+        elif lang == 'russian':
             alphabet = self.RUSS_ALPHABET
             shape = (4,8)
         key_s = set(key)
-        chiper_array = np.array(list(key) + sorted(set(alphabet) - set(key)))
-        chiper_array.reshape(shape)
-        return chiper_array
-    
+        chiper_matrix = np.array(list(key) + sorted(set(alphabet) - set(key)))
+        chiper_matrix.reshape(shape)
+        return chiper_matrix
+
+    def text_is_valid(self, text):
+        try:
+            text = text.replace(' ', '')
+            assert text.isalpha(), "Ваш ключ неверный"
+        except AssertionError:
+            return False
+        else:
+            return True
+
+
     def encode(self):
         text = self.message.text()
         encrypt_text = ""
         key = self.keyLabels[0].text()
         
-        if self.key_is_valid(key):
+        if self.key_is_valid(key) and self.text_is_valid(text) and self.get_string_lang(key) == self.get_string_lang(text):
             matrix = self.create_playfair_matrix(key)
-        
+            bigram = self.get_bigram(text)
