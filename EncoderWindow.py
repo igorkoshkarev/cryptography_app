@@ -290,8 +290,8 @@ class PlayfairEncoderWindow(EncoderWindow):
             return True
     
     def create_playfair_matrix(self, key):
-        text = text.replace('j', 'i')
-        text = text.replace('ё', 'е')
+        text = key.replace('j', 'i')
+        text = key.replace('ё', 'е')
         lang = self.get_string_lang(key)
         if lang == 'english':
             alphabet = self.ALPHABET
