@@ -308,6 +308,29 @@ class PlayfairEncoderWindow(EncoderWindow):
             return False
         else:
             return True
+    
+
+    def get_bigram(self, text):
+        text = text.replace(' ', '')
+        error = True
+        bigrams = []
+        base_index = 0
+        while error:
+            for i in range(base_index, len(text), 2):
+                if i == len(text)-1:
+                    bigram = text[i] + 'x'
+                elif text[i] == text[i+1]:
+                    bigram = text[i] + 'x'
+                    text = text[:i+1] + 'x' + text[i+1:]
+                    error = True
+                else:
+                    bigram = text[i] + text[i+1]
+                
+                base_index += 2
+                bigrams.append(bigram)
+                if error:
+                    break
+        return bigrams
 
 
     def encode(self):
