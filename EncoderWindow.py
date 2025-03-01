@@ -313,24 +313,31 @@ class PlayfairEncoderWindow(EncoderWindow):
     def get_bigram(self, text):
         text = text.replace(' ', '')
         error = True
-        bigrams = []
+        bigram = []
         base_index = 0
         while error:
             for i in range(base_index, len(text), 2):
                 if i == len(text)-1:
-                    bigram = text[i] + 'x'
+                    if text[i] != 'x':
+                        b = text[i] + 'x'
+                    else:
+                        b = text[i] + 'q'
                 elif text[i] == text[i+1]:
-                    bigram = text[i] + 'x'
-                    text = text[:i+1] + 'x' + text[i+1:]
+                    if text[i] != 'x':
+                        b = text[i] + 'x'
+                        text = text[:i+1] + 'x' + text[i+1:]
+                    else:
+                        b = text[i] + 'q'
+                        text = text[:i+1] + 'q' + text[i+1:]
                     error = True
                 else:
-                    bigram = text[i] + text[i+1]
+                    b = text[i] + text[i+1]
                 
                 base_index += 2
-                bigrams.append(bigram)
+                bigram.append(b)
                 if error:
                     break
-        return bigrams
+        return bigram
 
 
     def encode(self):
@@ -341,3 +348,28 @@ class PlayfairEncoderWindow(EncoderWindow):
         if self.key_is_valid(key) and self.text_is_valid(text) and self.get_string_lang(key) == self.get_string_lang(text):
             matrix = self.create_playfair_matrix(key)
             bigram = self.get_bigram(text)
+            for i in bigram:
+                s = matrix.shape
+                first = i[0]
+                second = i[1]
+                pos_first = np.where(matrix == first)
+                pos_first = (pos_first[0], pos_first[1])
+                pos_second = np.where(matrix == second)
+                pos_second = (pos_second[0], pos_second[1])
+                if pos_first[1] == pos_second[1]:
+                    pos_first = (pos_first[0], (pos_first[1]+1) % s[1])
+                    pos_second = (pos_second[0], (pos_second[1]+1) % s[1])
+                elif pos_first[0] == pos_second[0]:
+                    pos_first = ((pos_first[0]+1) % s[0], pos_first[1])
+                    pos_second = ((pos_second[0]+1) % s[0], pos_second[1])
+                else:
+                    pos_first = (pos_second[0], pos_first[1])
+                    pos_second = (pos_first[0], pos_second[1])
+                encrypt_text += matrix[pos_first[0]][pos_first[1]]
+                encrypt_text += matrix[pos_second[0]][pos_second[1]]
+        else:
+            self.error = QErrorMessage()
+            self.error.showMessage('Ваш ключ неверный')
+            return
+        self.encoded.setText(encrypt_text)
+            
