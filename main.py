@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QComboBox, QVBoxLayout, QWidget, QPushButton, QSizePolicy
 import EncoderWindow
 import DecoderWindow
+from freq_analyzer_window import FreqAnalyzeWindow
 
 
 class MainWindow(QMainWindow):
@@ -43,16 +44,17 @@ class MainWindow(QMainWindow):
             'Гаммирование',
             'Гаммирование файла'])
 
-        encode_button = QPushButton()
-        decode_button = QPushButton()
-        encode_button.setText("Зашифровать")
-        decode_button.setText("Расшифровать")
+        encode_button = QPushButton("Зашифровать")
+        decode_button = QPushButton("Расшифровать")
+        freq_analyze_button = QPushButton("Частотный анализ")
         encode_button.clicked.connect(self.encrypt)
         decode_button.clicked.connect(self.decrypt)
+        freq_analyze_button.clicked.connect(self.freq_analyze)
 
         layout.addWidget(self.ciphers)
         layout.addWidget(encode_button)
         layout.addWidget(decode_button)
+        layout.addWidget(freq_analyze_button)
 
         central_widget = QWidget()
         central_widget.setLayout(layout)
@@ -67,6 +69,10 @@ class MainWindow(QMainWindow):
     def decrypt(self):
         ind = self.ciphers.currentIndex()
         self.w = self.DECODER_WINDOWS[ind]()
+        self.w.show()
+    
+    def freq_analyze(self):
+        self.w = FreqAnalyzeWindow()
         self.w.show()
 
 
