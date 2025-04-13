@@ -11,14 +11,18 @@ class MainWindow(QMainWindow):
     EncoderWindow.RishelieEncoderWindow, 
     EncoderWindow.GronsfeldEncoderWindow, 
     EncoderWindow.VigenereEncoderWindow, 
-    EncoderWindow.PlayfairEncoderWindow]
+    EncoderWindow.PlayfairEncoderWindow,
+    EncoderWindow.GammingEncoderWindow,
+    EncoderWindow.GammingFileEncoderWindow]
     DECODER_WINDOWS = [
     DecoderWindow.AtbashDecoderWindow, 
     DecoderWindow.CaesarDecoderWindow, 
     DecoderWindow.RishelieDecoderWindow, 
     DecoderWindow.GronsfeldDecoderWindow, 
     DecoderWindow.VigenereDecoderWindow,
-    DecoderWindow.PlayfairDecoderWindow]
+    DecoderWindow.PlayfairDecoderWindow,
+    DecoderWindow.GammingDecoderWindow,
+    DecoderWindow.GammingFileDecoderWindow]
 
     def __init__(self):
         super().__init__()
@@ -35,7 +39,9 @@ class MainWindow(QMainWindow):
             'Шифр Решилье', 
             'Шифр Гронсфельда', 
             'Шифр Виженера',
-            'Шифр Плейфейра'])
+            'Шифр Плейфейра',
+            'Гаммирование',
+            'Гаммирование файла'])
 
         encode_button = QPushButton()
         decode_button = QPushButton()

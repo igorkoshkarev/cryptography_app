@@ -3,7 +3,7 @@ from enum import Enum
 import abc
 import re
 import numpy as np
-
+import random_generators
 
 class AlphabetName(Enum):
     RUSSIAN = 'russian'
@@ -13,6 +13,7 @@ class AlphabetName(Enum):
     RUSSIAN_AND_ENGLISH = 'russian_english'
     ENGLISH_FULL = 'english_full'
     RUSSIAN_FULL = 'russian_full'
+    RUSSIAN_ENGLISH_NUMBERS = 'rus_eng_num'
 
 Alphabet = namedtuple("Alphabet", ['name', 'letters', 'length'])
 
@@ -25,6 +26,7 @@ RUSSIAN_UPPER = Alphabet(AlphabetName.RUSSIAN_UPPER, 'АБВГДЕЁЖЗИЙКЛ
 FULL_RUSSIAN= Alphabet(AlphabetName.RUSSIAN_UPPER, 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ', 66)
 PLAYFAIR_RUSSIAN = Alphabet(AlphabetName.RUSSIAN, 'абвгдежзийклмнопрстуфхцчшщъыьэюя', 32)
 RUSSIAN_AND_ENGLISH = Alphabet(AlphabetName.RUSSIAN_AND_ENGLISH, 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ', 118)
+RUSSIAN_ENGLISH_NUMBERS = Alphabet(AlphabetName.RUSSIAN_ENGLISH_NUMBERS, 'abcdefghijklmnopqrstuvwxyzабвгдежзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ1234567890 .', 128)
 
 
 class Chiper(abc.ABC):
@@ -380,3 +382,60 @@ class Playfair(Chiper):
             decrypt_text += matrix[pos_second[0]][pos_second[1]]
         
         return decrypt_text
+
+
+class Gamming(Chiper):
+
+    def __init__(self):
+        self.alphabet = RUSSIAN_ENGLISH_NUMBERS
+
+    def _text_is_valid(self, text):
+        for i in text:
+            if i not in self.alphabet.letters:
+                return False
+        return True
+    
+    def gamming(self, text, key):
+        encrypt_text = ""
+
+        rand_generator = random_generators.MersenneTwister(key)
+        assert self._text_is_valid(text), "В используемом алфавите нет символов которые есть в тексте."
+
+        for ind, letter in enumerate(text):
+            ind_k = self.alphabet.letters.index(letter) ^ rand_generator.get_random_number_on_range(0, self.alphabet.length-1)
+            encrypt_text += self.alphabet.letters[ind_k]
+
+        return encrypt_text
+    
+    def encrypt(self, text, key):
+        return self.gamming(text, key)
+    
+    def decrypt(self, text, key):      
+        return self.gamming(text, key)
+
+class GammingFile(Chiper):
+
+    def __init__(self):
+        self.alphabet = RUSSIAN_ENGLISH_NUMBERS
+
+    def _text_is_valid(self, text):
+        for i in text:
+            if i not in self.alphabet.letters:
+                return False
+        return True
+    
+    def gamming(self, text, key):
+        encrypt_text = []
+
+        rand_generator = random_generators.MersenneTwister(key)
+
+        for letter_code in text:
+            encrypt_text.append(letter_code ^ int(bin(rand_generator.get_random_number_on_range(0, 2**8-1)), base=2))
+
+        return encrypt_text
+    
+    def encrypt(self, text, key):
+        return self.gamming(text, key)
+    
+    def decrypt(self, text, key):      
+        return self.gamming(text, key)
