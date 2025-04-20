@@ -212,20 +212,20 @@ class PlayfairEncoderWindow(EncoderTextWindow):
 
 class GammingEncoderWindow(EncoderTextWindow):
 
-    KEYS = [QSpinBox]
-    LABELS = ['Сид: ']
+    KEYS = [QSpinBox, QSpinBox, QSpinBox, QSpinBox]
+    LABELS = ['Сид: ', 'a: ', 'b: ', 'm: ']
 
     def __init__(self):
         super().__init__()
-        self.setFixedSize(300, 200)
+        self.setFixedSize(300, 400)
         self.chiper = chipers.Gamming()
 
 class GammingFileEncoderWindow(EncoderFileWindow):
 
-    KEYS = [QSpinBox]
-    LABELS = ['Сид: ']
+    KEYS = [QSpinBox, QSpinBox, QSpinBox, QSpinBox]
+    LABELS = ['Сид: ', 'a: ', 'b: ', 'm: ']
 
     def __init__(self):
         super().__init__()
-        self.setMinimumSize(300, 200)
+        self.setMinimumSize(300, 400)
         self.chiper = chipers.GammingFile()

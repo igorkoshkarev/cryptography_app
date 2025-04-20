@@ -42,3 +42,22 @@ class MersenneTwister:
         normalized = n / (2**32)
         return start + int(normalized * (end - start + 1))
 
+
+class LinearCongruentialGenerator:
+    def __init__(self, seed, a, b, m):
+        self.X = seed
+        self.a = a
+        self.b = b
+        self.m = m
+
+    def generate(self):
+        self.X = (self.X*self.a + self.b) % self.m
+    
+    def get_random_number(self):
+        self.generate()
+        return self.X
+    
+    def get_random_number_on_range(self, start, end):
+        n = self.get_random_number()
+        return start + int(n % (end-start+1))
+

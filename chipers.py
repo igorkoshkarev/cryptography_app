@@ -398,7 +398,7 @@ class Gamming(Chiper):
     def gamming(self, text, key):
         encrypt_text = ""
 
-        rand_generator = random_generators.MersenneTwister(key)
+        rand_generator = random_generators.LinearCongruentialGenerator(*key)
         assert self._text_is_valid(text), "В используемом алфавите нет символов которые есть в тексте."
 
         for ind, letter in enumerate(text):
@@ -427,7 +427,7 @@ class GammingFile(Chiper):
     def gamming(self, text, key):
         encrypt_text = []
 
-        rand_generator = random_generators.MersenneTwister(key)
+        rand_generator = random_generators.LinearCongruentialGenerator(*key)
 
         for letter_code in text:
             encrypt_text.append(letter_code ^ int(bin(rand_generator.get_random_number_on_range(0, 2**8-1)), base=2))
