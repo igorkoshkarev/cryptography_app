@@ -8,6 +8,7 @@ QSpinBox,
 QErrorMessage,
 QFileDialog)
 import chipers
+from keys import DESKey
 
 
 class EncoderWindow(QWidget):
@@ -229,3 +230,47 @@ class GammingFileEncoderWindow(EncoderFileWindow):
         super().__init__()
         self.setMinimumSize(300, 400)
         self.chiper = chipers.GammingFile()
+
+
+class DESEncoderWindow(EncoderTextWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 400)
+        self.auto_gen_key = QPushButton('сгенерить ключ')
+        self.centralLayout.addWidget(self.auto_gen_key, 0)
+        self.auto_gen_key.clicked.connect(self.set_key)
+        self.chiper = chipers.DES()
+    
+    def set_key(self):
+        k = DESKey()
+        a = str(k.gen_init_key())
+        self.keys[0].setText(a)
+    
+    def _get_keys(self):
+        return int(self.keys[0].text())
+
+
+class DESFileEncoderWindow(EncoderFileWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 400)
+        self.auto_gen_key = QPushButton('сгенерить ключ')
+        self.centralLayout.addWidget(self.auto_gen_key, 0)
+        self.auto_gen_key.clicked.connect(self.set_key)
+        self.chiper = chipers.DESFile()
+    
+    def set_key(self):
+        k = DESKey()
+        a = str(k.gen_init_key())
+        self.keys[0].setText(a)
+    
+    def _get_keys(self):
+        return int(self.keys[0].text())

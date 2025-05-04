@@ -232,3 +232,30 @@ class GammingFileDecoderWindow(DecoderFileWindow):
         super().__init__()
         self.setFixedSize(300, 400)
         self.chiper = chipers.GammingFile()
+
+class DESDecoderWindow(DecoderTextWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
+        self.chiper = chipers.DES()
+    
+    def _get_keys(self):
+        return int(self.keys[0].text())
+
+class DESFileDecoderWindow(DecoderFileWindow):
+
+    KEYS = [QLineEdit]
+    LABELS = ['Ключ: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
+        self.chiper = chipers.DESFile()
+    
+    def _get_keys(self):
+        return int(self.keys[0].text())
+
