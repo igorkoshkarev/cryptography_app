@@ -147,6 +147,53 @@ class RSAKey(Key):
         return n, e, d
 
 
+class DHKey(Key):
+
+    def __init__(self):
+        super().__init__()
+
+    def is_simple(self, num, rounds=10):
+        num -= 1
+        s = 0
+        d = num
+        while d % 2 != 0:
+            d //= 2
+            s += 1
+        
+        for i in range(rounds):
+            a = random.randint(2, num-1)
+            if pow(a, d, num+1) == 1:
+                continue
+            for j in range(0, s):
+                if pow(a, d*(2**j), num+1) == -1:
+                    break
+            else:
+                return False
+        return True
+
+    def gen_init(self):
+        p = 0
+        while p == 0 or not self.is_simple(p):
+            p = random.randint(10**2, 10**3)
+            print(p)
+        g = 0
+        while g == 0 or not self.is_simple(g) or not pow(g, p-1, p) != 1:
+            g = random.randint(10**2, 10**3)
+        a = random.randint(10**2, 10**3)
+        b = random.randint(10**2, 10**3)
+        return p, g, a, b
+    
+    def _key_is_valid(self, keys):
+        p, g, a, b = keys
+        return self.is_simple(p) and self.is_simple(g) and pow(g, p-1, p) == 1
+
+    def gen(self, keys):
+        p, g, a, b = keys
+        assert self._key_is_valid(keys), "Невалидные ключи"
+        A = pow(g, a, p)
+        B = pow(g, b, p)
+        return A, B
+
 if __name__ == '__main__':
     print(bin(1))
     k = DESKey()

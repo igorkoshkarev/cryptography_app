@@ -272,3 +272,16 @@ class RSADecoderWindow(DecoderTextWindow):
 
     def _get_keys(self):
         return int(self.keys[0].text()), int(self.keys[1].text())
+
+class DHDecoderWindow(DecoderTextWindow):
+
+    KEYS = [QLineEdit, QLineEdit, QLineEdit]
+    LABELS = ['B: ', 'a: ', 'p: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 350)
+        self.chiper = chipers.DH()
+
+    def _get_keys(self):
+        return int(self.keys[0].text()), int(self.keys[1].text()), int(self.keys[2].text())

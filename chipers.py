@@ -724,6 +724,27 @@ class RSA(Chiper):
         return decrypted_text
         
 
+class DH(Chiper):
+    
+    def __init__(self):
+        super().__init__()
+        self.alphabet = RUSSIAN_ENGLISH_NUMBERS
+
+
+    def encrypt(self, text, key):
+        A, b, p = key
+        text = int(text.strip())
+        encrypted_text = pow(A, b, p)
+        return str(encrypted_text)
+        
+
+    def decrypt(self, text, key):
+        B, a, p = key
+        text = int(text.strip())
+        decrypted_text = pow(B, a, p)
+        return str(decrypted_text)
+        
+
 if __name__ == '__main__':
     a = RSA()
     sdfsdf = 1234

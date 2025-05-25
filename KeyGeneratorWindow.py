@@ -104,3 +104,16 @@ class RSAKeyGeneratorWindow(KeyGeneratorWindow):
         super().__init__()
         self.setFixedSize(300, 400)
         self.generator = keys.RSAKey()
+
+
+class DHKeyGeneratorWindow(KeyGeneratorWindow):
+    INIT_KEYS = [QLineEdit, QLineEdit, QLineEdit, QLineEdit]
+    INIT_LABELS = ['p', 'g', 'a', 'b']
+
+    KEYS = [QLineEdit, QLineEdit]
+    LABELS = ['A', 'B']
+    
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 400)
+        self.generator = keys.DHKey()
