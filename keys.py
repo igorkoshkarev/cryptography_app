@@ -1,3 +1,4 @@
+import random
 from random import getrandbits
 
 
@@ -73,6 +74,78 @@ class DESKey(Key):
             K[i] = self._permutation(self.TABLE_FOR_FINAL_PERM, K[i], 56)
 
         return K
+    
+
+class RSAKey(Key):
+
+    def __init__(self):
+        super().__init__()
+    
+    def NOD(self, a, b):
+        if a > b:
+            b, a = a, b
+        while b % a != 0:
+            r = b % a
+            b = a
+            a = r
+        return a
+    
+    def NODextended(self, a, b):
+        if b == 0:
+            return a, 1, 0  
+        else:  
+            gcd, x1, y1 = self.NODextended(b, a % b)  
+            x = y1
+            y = x1 - (a // b) * y1
+            return gcd, x, y
+
+    def is_simple(self, num, rounds=10):
+        num -= 1
+        s = 0
+        d = num
+        while d % 2 != 0:
+            d //= 2
+            s += 1
+        
+        for i in range(rounds):
+            a = random.randint(2, num-1)
+            if pow(a, d, num+1) == 1:
+                continue
+            for j in range(0, s):
+                if pow(a, d*(2**j), num+1) == -1:
+                    break
+            else:
+                return False
+        return True
+
+    def gen_init(self):
+        p = 0
+        while p == 0 or not self.is_simple(p):
+            p = random.randint(10**2, 10**3)
+            print(p)
+        q = 0
+        while q == 0 or not self.is_simple(q):
+            q = random.randint(10**2, 10**3)
+        n = (q-1)*(p-1)
+        e = 0
+        while e == 0 or self.NOD(n, e) != 1:
+            e = random.randint(10**2, 10**3)
+        return p, q, e
+    
+    def _key_is_valid(self, keys):
+        p, q, e = keys
+        return self.is_simple(p) and self.is_simple(q) and self.NOD(e, (p-1)*(q-1)) == 1
+
+    def gen(self, keys):
+        p, q, e = keys
+        assert self._key_is_valid(keys), "Невалидные ключи"
+        n = p*q
+        n_euler = (p-1)*(q-1)
+        _, d, _ = self.NODextended(e, n_euler)
+        if d < 0:
+            d = n_euler + d
+        return n, e, d
+
 
 if __name__ == '__main__':
     print(bin(1))

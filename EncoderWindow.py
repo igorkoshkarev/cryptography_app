@@ -9,6 +9,7 @@ QErrorMessage,
 QFileDialog)
 import chipers
 from keys import DESKey
+import KeyGeneratorWindow
 
 
 class EncoderWindow(QWidget):
@@ -274,3 +275,29 @@ class DESFileEncoderWindow(EncoderFileWindow):
     
     def _get_keys(self):
         return int(self.keys[0].text())
+
+
+class RSAEncoderWindow(EncoderTextWindow):
+
+    KEYS = [QLineEdit, QLineEdit]
+    LABELS = ['n: ', 'd: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setMinimumSize(300, 400)
+        self.chiper = chipers.RSA()
+
+        self.create_keys_button = QPushButton()
+        self.create_keys_button.setText("Окно генерации ключей")
+
+        self.create_keys_button.clicked.connect(self.open_create_key_window)
+
+        self.centralLayout.addWidget(self.create_keys_button)
+    
+    def open_create_key_window(self):
+        self.key_window = KeyGeneratorWindow.RSAKeyGeneratorWindow()
+        self.key_window.show()
+    
+    def _get_keys(self):
+        return int(self.keys[0].text()), int(self.keys[1].text())
+    

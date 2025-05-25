@@ -5,6 +5,8 @@ import re
 import numpy as np
 import random_generators
 from keys import *
+import random
+
 
 class AlphabetName(Enum):
     RUSSIAN = 'russian'
@@ -417,15 +419,6 @@ class Gamming(Chiper):
         return self.gamming(text, key)
 
 class GammingFile(Chiper):
-
-    def __init__(self):
-        self.alphabet = RUSSIAN_ENGLISH_NUMBERS
-
-    def _text_is_valid(self, text):
-        for i in text:
-            if i not in self.alphabet.letters:
-                return False
-        return True
     
     def gamming(self, text, key):
         encrypt_text = []
@@ -702,18 +695,45 @@ class DESFile(DES):
         return res
 
 
-if __name__ == '__main__':
-    a = DESFile()
-    with open('DES.pdf', 'rb') as f:
-        text = f.read()
-        enc = a.encrypt(text, 22)
-    with open('DES2.pdf', 'wb') as f:
-        for i in enc:
-            f.write(i.to_bytes())
+class RSA(Chiper):
     
-    with open('DES2.pdf', 'rb') as f:
-        text = f.read()
-        enc = a.decrypt(text, 22)
-    with open('DES3.pdf', 'wb') as f:
-        for i in enc:
-            f.write(i.to_bytes())
+    def __init__(self):
+        super().__init__()
+        self.alphabet = RUSSIAN_ENGLISH_NUMBERS
+
+
+    def encrypt(self, text, key):
+        n, e = key
+        encrypted_text = []
+        for i in text:
+            index = self.alphabet.letters.index(i)
+            print(index, e, n)
+            enc = pow(index, e, n)
+            encrypted_text.append(str(enc))
+        return ' '.join(encrypted_text)
+        
+
+    def decrypt(self, text, key):
+        text = text.split(' ')
+        n, d = key
+        decrypted_text = ""
+        for i in text:
+            print(i, d, n)
+            enc = pow(int(i), d, n)
+            decrypted_text += self.alphabet.letters[enc]
+        return decrypted_text
+        
+
+if __name__ == '__main__':
+    a = RSA()
+    sdfsdf = 1234
+    n = 859420
+    e = 853
+    d = 840277
+
+    print((e * d) % n)
+
+    sdfsdf = pow(sdfsdf, e, n)
+    print(sdfsdf)
+    sdfsdf = pow(sdfsdf, d, n)
+    print(sdfsdf)

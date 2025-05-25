@@ -16,7 +16,8 @@ class MainWindow(QMainWindow):
     EncoderWindow.GammingEncoderWindow,
     EncoderWindow.GammingFileEncoderWindow,
     EncoderWindow.DESEncoderWindow,
-    EncoderWindow.DESFileEncoderWindow]
+    EncoderWindow.DESFileEncoderWindow,
+    EncoderWindow.RSAEncoderWindow]
     DECODER_WINDOWS = [
     DecoderWindow.AtbashDecoderWindow, 
     DecoderWindow.CaesarDecoderWindow, 
@@ -27,7 +28,8 @@ class MainWindow(QMainWindow):
     DecoderWindow.GammingDecoderWindow,
     DecoderWindow.GammingFileDecoderWindow,
     DecoderWindow.DESDecoderWindow,
-    DecoderWindow.DESFileDecoderWindow]
+    DecoderWindow.DESFileDecoderWindow,
+    DecoderWindow.RSADecoderWindow]
 
     def __init__(self):
         super().__init__()
@@ -48,7 +50,8 @@ class MainWindow(QMainWindow):
             'Гаммирование',
             'Гаммирование файла',
             'DES текста',
-            'DES файла'])
+            'DES файла',
+            'RSA'])
 
         encode_button = QPushButton("Зашифровать")
         decode_button = QPushButton("Расшифровать")

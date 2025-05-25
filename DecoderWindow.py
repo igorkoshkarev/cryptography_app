@@ -258,4 +258,17 @@ class DESFileDecoderWindow(DecoderFileWindow):
     
     def _get_keys(self):
         return int(self.keys[0].text())
+    
 
+class RSADecoderWindow(DecoderTextWindow):
+
+    KEYS = [QLineEdit, QLineEdit]
+    LABELS = ['n: ', 'd: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 350)
+        self.chiper = chipers.RSA()
+
+    def _get_keys(self):
+        return int(self.keys[0].text()), int(self.keys[1].text())
