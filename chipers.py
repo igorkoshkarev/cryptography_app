@@ -6,7 +6,7 @@ import numpy as np
 import random_generators
 from keys import *
 import random
-
+import hashlib
 
 class AlphabetName(Enum):
     RUSSIAN = 'russian'
@@ -740,9 +740,33 @@ class DH(Chiper):
 
     def decrypt(self, text, key):
         B, a, p = key
-        text = int(text.strip())
         decrypted_text = pow(B, a, p)
         return str(decrypted_text)
+
+
+class RSAPodpis(Chiper):
+    
+    def __init__(self):
+        super().__init__()
+        self.alphabet = RUSSIAN_ENGLISH_NUMBERS
+
+    def encrypt(self, text, key):
+        n, e = key
+        hash_text = int(hashlib.md5(text.encode()).hexdigest(), base=16)
+        print(hash_text)
+        encrypted_text = pow(hash_text, e, n)
+        return str(encrypted_text)
+        
+
+    def decrypt(self, text, key):
+        n, d, podpis = key
+        podpis = pow(podpis, d, n)
+        hash_text = int(hashlib.md5(text.encode()).hexdigest(), base=16)
+        print(hash_text)
+        if hash_text == podpis:
+            return "Документ подлинный"
+        else:
+            return "Документ не подлинный"
         
 
 if __name__ == '__main__':

@@ -18,7 +18,8 @@ class MainWindow(QMainWindow):
     EncoderWindow.DESEncoderWindow,
     EncoderWindow.DESFileEncoderWindow,
     EncoderWindow.RSAEncoderWindow,
-    EncoderWindow.DHEncoderWindow]
+    EncoderWindow.DHEncoderWindow,
+    EncoderWindow.RSAPodpisEncoderWindow]
     DECODER_WINDOWS = [
     DecoderWindow.AtbashDecoderWindow, 
     DecoderWindow.CaesarDecoderWindow, 
@@ -31,7 +32,8 @@ class MainWindow(QMainWindow):
     DecoderWindow.DESDecoderWindow,
     DecoderWindow.DESFileDecoderWindow,
     DecoderWindow.RSADecoderWindow,
-    DecoderWindow.DHDecoderWindow]
+    DecoderWindow.DHDecoderWindow,
+    DecoderWindow.RSAPodpisDecoderWindow]
 
     def __init__(self):
         super().__init__()
@@ -54,7 +56,8 @@ class MainWindow(QMainWindow):
             'DES текста',
             'DES файла',
             'RSA',
-            'Диффи-Хеллман'])
+            'Диффи-Хеллман',
+            'Электронная подпись RSA'])
 
         encode_button = QPushButton("Зашифровать")
         decode_button = QPushButton("Расшифровать")

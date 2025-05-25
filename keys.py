@@ -121,15 +121,15 @@ class RSAKey(Key):
     def gen_init(self):
         p = 0
         while p == 0 or not self.is_simple(p):
-            p = random.randint(10**2, 10**3)
+            p = random.randint(10**32, 10**33)
             print(p)
         q = 0
         while q == 0 or not self.is_simple(q):
-            q = random.randint(10**2, 10**3)
+            q = random.randint(10**32, 10**33)
         n = (q-1)*(p-1)
         e = 0
         while e == 0 or self.NOD(n, e) != 1:
-            e = random.randint(10**2, 10**3)
+            e = random.randint(10**32, 10**33)
         return p, q, e
     
     def _key_is_valid(self, keys):
@@ -174,13 +174,13 @@ class DHKey(Key):
     def gen_init(self):
         p = 0
         while p == 0 or not self.is_simple(p):
-            p = random.randint(10**2, 10**3)
+            p = random.randint(10**32, 10**33)
             print(p)
         g = 0
-        while g == 0 or not self.is_simple(g) or not pow(g, p-1, p) != 1:
-            g = random.randint(10**2, 10**3)
-        a = random.randint(10**2, 10**3)
-        b = random.randint(10**2, 10**3)
+        while g == 0 or not self.is_simple(g) or not pow(g, p-1, p) == 1:
+            g = random.randint(10**32, 10**33)
+        a = random.randint(10**32, 10**33)
+        b = random.randint(10**32, 10**33)
         return p, g, a, b
     
     def _key_is_valid(self, keys):

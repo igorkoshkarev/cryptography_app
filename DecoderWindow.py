@@ -285,3 +285,16 @@ class DHDecoderWindow(DecoderTextWindow):
 
     def _get_keys(self):
         return int(self.keys[0].text()), int(self.keys[1].text()), int(self.keys[2].text())
+
+class RSAPodpisDecoderWindow(DecoderTextWindow):
+
+    KEYS = [QLineEdit, QLineEdit, QLineEdit]
+    LABELS = ['n: ', 'd: ', 'Подпись: ']
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 350)
+        self.chiper = chipers.RSAPodpis()
+
+    def _get_keys(self):
+        return int(self.keys[0].text()), int(self.keys[1].text()), int(self.keys[2].text())
