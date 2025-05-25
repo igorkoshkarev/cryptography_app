@@ -48,8 +48,8 @@ class DecoderTextWindow(DecoderWindow):
     def __init__(self):
         super().__init__()
 
-        l1 = QLabel()
-        l1.setText("Введите шифротекст: ")
+        self.l1 = QLabel()
+        self.l1.setText("Введите шифротекст: ")
         self.message = QLineEdit()
 
         l2 = QLabel()
@@ -64,7 +64,7 @@ class DecoderTextWindow(DecoderWindow):
 
         self._draw_keys_widgets()
 
-        self.centralLayout.addWidget(l1)
+        self.centralLayout.addWidget(self.l1)
         self.centralLayout.addWidget(self.message)
         self.centralLayout.addWidget(l2)
         self.centralLayout.addWidget(self.decoded)
@@ -282,9 +282,21 @@ class DHDecoderWindow(DecoderTextWindow):
         super().__init__()
         self.setFixedSize(300, 350)
         self.chiper = chipers.DH()
+        self.message.deleteLater()
+        self.l1.deleteLater()
 
     def _get_keys(self):
         return int(self.keys[0].text()), int(self.keys[1].text()), int(self.keys[2].text())
+    
+    def decrypt(self):
+        keys = self._get_keys()
+        text = ""
+        try:
+            decoded_text = self.chiper.decrypt(text, keys)
+            self.decoded.setText(decoded_text)
+        except AssertionError as e:
+            self.error = QErrorMessage()
+            self.error.showMessage(str(e))
 
 class RSAPodpisDecoderWindow(DecoderTextWindow):
 
@@ -298,3 +310,5 @@ class RSAPodpisDecoderWindow(DecoderTextWindow):
 
     def _get_keys(self):
         return int(self.keys[0].text()), int(self.keys[1].text()), int(self.keys[2].text())
+    
+    

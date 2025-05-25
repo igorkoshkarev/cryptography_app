@@ -57,8 +57,8 @@ class EncoderTextWindow(EncoderWindow):
     def __init__(self):
         super().__init__()
 
-        l1 = QLabel()
-        l1.setText("Введите ссобщение: ")
+        self.l1 = QLabel()
+        self.l1.setText("Введите ссобщение: ")
 
         self.message = QLineEdit()
         l2 = QLabel()
@@ -73,7 +73,7 @@ class EncoderTextWindow(EncoderWindow):
 
         self._draw_keys_widgets()
 
-        self.centralLayout.addWidget(l1)
+        self.centralLayout.addWidget(self.l1)
         self.centralLayout.addWidget(self.message)
         self.centralLayout.addWidget(l2)
         self.centralLayout.addWidget(self.encoded)
@@ -318,6 +318,9 @@ class DHEncoderWindow(EncoderTextWindow):
         self.create_keys_button.clicked.connect(self.open_create_key_window)
 
         self.centralLayout.addWidget(self.create_keys_button)
+
+        self.message.deleteLater()
+        self.l1.deleteLater()
     
     def open_create_key_window(self):
         self.key_window = KeyGeneratorWindow.DHKeyGeneratorWindow()
@@ -325,6 +328,16 @@ class DHEncoderWindow(EncoderTextWindow):
     
     def _get_keys(self):
         return int(self.keys[0].text()), int(self.keys[1].text()), int(self.keys[2].text())
+    
+    def encrypt(self):
+        keys = self._get_keys()
+        text = " "
+        try:
+            encoded_text = self.chiper.encrypt(text, keys)
+            self.encoded.setText(encoded_text)
+        except AssertionError as e:
+            self.error = QErrorMessage()
+            self.error.showMessage(str(e))
 
 class RSAPodpisEncoderWindow(EncoderTextWindow):
 

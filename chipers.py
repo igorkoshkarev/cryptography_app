@@ -733,7 +733,6 @@ class DH(Chiper):
 
     def encrypt(self, text, key):
         A, b, p = key
-        text = int(text.strip())
         encrypted_text = pow(A, b, p)
         return str(encrypted_text)
         

@@ -192,6 +192,9 @@ class DHKey(Key):
         assert self._key_is_valid(keys), "Невалидные ключи"
         A = pow(g, a, p)
         B = pow(g, b, p)
+        if pow(A, b, p) != pow(B, a, p):
+            print(pow(A, b, p), pow(B, a, p))
+            return -1, -1
         return A, B
 
 if __name__ == '__main__':
